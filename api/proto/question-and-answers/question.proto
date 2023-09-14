@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package question;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "pkg/api/question";
+
+// -------------------------------------
+//   Question's Entities
+// -------------------------------------
+
+message Question {
+    uint64 id = 1;
+    google.protobuf.Timestamp dateCreated = 2;
+    string questionText = 3;
+    uint64 questionAuthorId = 4;
+    optional string answerText = 5;
+    optional uint64 answerAuthorId = 6;
+    optional bool published = 7;
+}
+
+message QuestionBody {
+    string questionText = 1;
+    uint64 questionAuthorId = 2;
+    optional string answerText = 3;
+    optional uint64 answerAuthorId = 4;
+    optional bool published = 5;
+}
+
+// -------------------------------------
+//   Service's Entities
+// -------------------------------------
+
+message QuestionRequest {
+    uint64 id = 1;
+}
+
+message ListQuestionRequest {
+    optional uint64 authorId = 1;
+}
+
+message CreateQuestionRequest {
+    QuestionBody body = 1;
+}
+
+message UpdateQuestionRequest {
+    uint64 id = 1;
+    QuestionBody item = 2;
+}
+
+message DeleteQuestionRequest {
+    uint64 id = 1;
+}
+
+message QuestionList {
+    repeated Question items = 1;
+}
+
+// -------------------------------------
+//   Services
+// -------------------------------------
+
+service QuestionService {
+    rpc GetQuestionByID(QuestionRequest) returns (Question) {}
+    rpc ListQuestions(ListQuestionRequest) returns (QuestionList) {}
+    rpc CreateQuestion(CreateQuestionRequest) returns (Question) {}
+    rpc UpdateQuestion(UpdateQuestionRequest) returns (Question) {}
+    rpc DeleteQuestion(DeleteQuestionRequest) returns (Question) {}
+}

@@ -1,0 +1,1 @@
+protoc --proto_path=api/proto/question-and-answers --proto_path=third_party --go_out=. --go-grpc_out=. question.proto

@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: cmd/api/Dockerfile
+    image: question-and-answers-api
+    environment:
+      REST_PORT: "${REST_PORT}"
+      GRPC_PORT: "${GRPC_PORT}"
+      LOG_LEVEL: INFO
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_NAME: "${DB_NAME}"
+      DB_PORT: "${DB_PORT}"
+      DB_TIMEZONE: America/Sao_Paulo
+    ports:
+      - ${REST_PORT}:${REST_PORT}
+      - ${GRPC_PORT}:${GRPC_PORT}
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    volumes:
+      - ./sql/01-initdb.sql:/docker-entrypoint-initdb.d/01-initdb.sql
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - 5432:5432

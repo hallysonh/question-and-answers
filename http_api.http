@@ -1,0 +1,44 @@
+@appPort = {{$dotenv REST_PORT}}
+@apiBaseUrl = http://localhost:{{appPort}}/api
+
+###
+# @name GetQuestionByID
+@questionID = 1
+GET {{apiBaseUrl}}/question/{{questionID}} HTTP/1.1
+
+###
+# @name ListQuestions
+GET {{apiBaseUrl}}/question HTTP/1.1
+
+###
+# @name ListQuestionByAuthor
+@author = 1
+GET {{apiBaseUrl}}/question?authorId={{author}} HTTP/1.1
+
+###
+# @name CreateQuestion
+POST {{apiBaseUrl}}/question HTTP/1.1
+content-type: application/json
+
+{
+    "questionText": "Question 1",
+    "questionAuthorId": 1
+}
+
+###
+# @name UpdateQuestion
+PUT {{apiBaseUrl}}/question/{{questionID}} HTTP/1.1
+content-type: application/json
+
+{
+    "questionText": "Question {{questionID}}.1",
+    "questionAuthorId": 1,
+    "answerText": "Answer {{questionID}}",
+    "answerAuthorId": 2,
+    "published": true
+}
+
+###
+# @name DeleteQuestion
+@lastCreated = {{CreateQuestion.response.body.$.id}}
+DELETE {{apiBaseUrl}}/question/{{lastCreated}} HTTP/1.1
